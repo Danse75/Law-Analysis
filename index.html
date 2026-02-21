@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Análisis jurídico – Agente de apoyo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --primary: #1e3a8a;
+      --primary-soft: #e0ebff;
+      --accent: #f97316;
+      --border: #d4d4dd;
+      --text-main: #111827;
+      --text-soft: #4b5563;
+      --radius-lg: 16px;
+      --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.12);
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #eef2ff 0, #f9fafb 55%, #e5e7eb 100%);
+      color: var(--text-main);
+    }
+
+    .page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 24px 16px 48px 16px;
+    }
+
+    header.hero {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      color: #f9fafb;
+      padding: 22px 24px;
+      border-radius: 18px;
+      box-shadow: var(--shadow-soft);
+      margin-bottom: 24px;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+
+    header.hero h1 {
+      margin: 0 0 4px 0;
+      font-size: 1.7rem;
+      letter-spacing: 0.01em;
+    }
+
+    header.hero p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: #e5e7eb;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(147, 197, 253, 0.1);
+      color: #bfdbfe;
+      font-size: 0.78rem;
+      margin-bottom: 6px;
+    }
+
+    .hero-tag span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+    }
+
+    main {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 20px 18px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    h2.section-title {
+      font-size: 1.05rem;
+      margin: 0 0 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2.section-title span.badge {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .subtitle {
+      margin: 0 0 14px 0;
+      font-size: 0.85rem;
+      color: var(--text-soft);
+    }
+
+    label {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #111827;
+      margin-bottom: 4px;
+      display: inline-block;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    textarea {
+      width: 100%;
+      font-size: 0.86rem;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      outline: none;
+      background: #f9fafb;
+      transition: border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="number"]:focus,
+    textarea:focus {
+      border-color: #2563eb;
+      background: #ffffff;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+    }
+
+    textarea {
+      min-height: 70px;
+      resize: vertical;
+      font-family: inherit;
+      line-height: 1.4;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .col-3 {
+      flex: 1 1 180px;
+    }
+
+    .col-2 {
+      flex: 1 1 260px;
+    }
+
+    .chips-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 4px 0 2px 0;
+    }
+
+    .chip {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      border: 1px solid #cbd5f5;
+      background: #eff6ff;
+      color: #1e3a8a;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chip input {
+      margin: 0;
+    }
+
+    .chip span {
+      pointer-events: none;
+    }
+
+    .btn {
+      border-radius: 999px;
+      border: none;
+      padding: 8px 16px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: #f9fafb;
+      box-shadow: 0 7px 18px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4);
+    }
+
+    .btn-ghost {
+      background: #eef2ff;
+      color: #1e3a8a;
+    }
+
+    .btn-ghost:hover {
+      background: #e0e7ff;
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 0.78rem;
+    }
+
+    .actions-row {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    pre.output {
+      background: #020617;
+      color: #e5e7eb;
+      border-radius: 12px;
+      padding: 14px 14px 16px 14px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      overflow: auto;
+      font-family: var(--mono);
+      white-space: pre;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 0.76rem;
+      margin-right: 6px;
+    }
+
+    .pill span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: #22c55e;
+    }
+
+    .muted {
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .legal-box {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #f3f4ff;
+      border: 1px dashed #c7d2fe;
+      font-size: 0.78rem;
+      color: #374151;
+    }
+
+    .legal-box h3 {
+      margin: 0 0 6px 0;
+      font-size: 0.85rem;
+      color: #1e3a8a;
+    }
+
+    .legal-box ul {
+      padding-left: 18px;
+      margin: 0;
+    }
+
+    .legal-box li {
+      margin-bottom: 4px;
+    }
+
+    footer {
+      margin-top: 18px;
+      font-size: 0.76rem;
+      color: #6b7280;
+      text-align: center;
+    }
+
+    footer hr {
+      border: none;
+      border-top: 1px solid #e5e7eb;
+      margin-bottom: 6px;
+    }
+
+    .toast {
+      margin-top: 4px;
+      font-size: 0.78rem;
+      color: #166534;
+      background: #ecfdf3;
+      border-radius: 999px;
+      padding: 4px 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .toast.hidden {
+      display: none;
+    }
+
+    .error-note {
+      margin-top: 4px;
+      font-size: 0.78rem;
+      color: #b91c1c;
+    }
+
+    /* JSON debug totalmente oculto para el usuario */
+    #debug-json-wrapper {
+      display: none;
+    }
+
+    /* Layout nuevo: informe + pregunta + botones en el mismo nivel */
+    .informe-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-top: 8px;
+    }
+
+    .informe-feedback {
+      flex: 1 1 260px;
+      min-width: 220px;
+    }
+
+    .informe-actions {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+
+    @media (max-width: 720px) {
+      header.hero {
+        padding: 18px 16px;
+      }
+      .page {
+        padding: 16px 12px 32px 12px;
+      }
+      .informe-actions {
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <div class="hero-tag">
+        <span class="dot"></span>
+        <span>Agente de apoyo en análisis jurídico</span>
+      </div>
+      <h1>Análisis jurídico asistido por IA</h1>
+      <p>
+        Herramienta de apoyo para psicología, psiquiatría y salud mental en Ecuador.
+        Aplica un razonamiento jurídico estructurado usando un
+        repositorio local de normas; no sustituye asesoría legal formal.
+      </p>
+    </header>
+
+    <main>
+      <!-- Paso 1: Registro -->
+      <section id="registro-section" class="card">
+        <h2 class="section-title">
+          Registro de usuario
+          <span class="badge">Paso 1 de 2</span>
+        </h2>
+        <p class="subtitle">
+          Antes de usar el agente, registra tus datos básicos. Esto solo se utiliza en el encabezado
+          del informe para dejar constancia profesional.
+        </p>
+        <form id="registro-form">
+          <div class="row">
+            <div class="col-3">
+              <label for="nombre">Nombres y apellidos</label>
+              <input id="nombre" name="nombre" type="text" autocomplete="off" required />
+            </div>
+            <div class="col-3">
+              <label for="cedula">Número de cédula</label>
+              <input id="cedula" name="cedula" type="text" autocomplete="off" required />
+            </div>
+            <div class="col-3">
+              <label for="profesion">Profesión</label>
+              <input id="profesion" name="profesion" type="text" autocomplete="off" placeholder="Psicólogo clínico, psiquiatra, etc." required />
+            </div>
+          </div>
+
+          <div class="legal-box">
+            <h3>Privacidad y uso responsable</h3>
+            <ul>
+              <li><strong>Nota de descargo:</strong> En cumplimiento con lo establecido en la Ley Orgánica de Protección de Datos Personales, esta aplicación de consulta garantiza la confidencialidad y privacidad de los datos personales que usted facilita.</li>
+              <li><strong>Coorresponsabilidad:</strong> Esta aplicación es de uso complementario a las actividades que usted ejecuta. En ningún momento sustituye el criterio de un profesional en legislación.</li>
+              <li><strong>Privacidad de casos:</strong> Evite en cualquier momento dar información de carácter personal relacionada con los casos que usted consulta.</li>
+            </ul>
+          </div>
+
+          <div class="actions-row">
+            <button type="submit" class="btn btn-primary">
+              Continuar al análisis jurídico
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Paso 2: Aplicación -->
+      <section id="app-section" class="card hidden">
+        <h2 class="section-title">
+          Análisis jurídico
+          <span class="badge">Paso 2 de 2</span>
+        </h2>
+        <p class="subtitle">
+          Describe brevemente el caso, indica la consulta jurídica y marca el contexto.
+          El agente analizará el caso con la biblioteca normativa local y generará un
+          informe en formato: <strong>NORMATIVA PERTINENTE, HECHO ANALIZADO, SUGERENCIA DE ACCIÓN A TOMAR</strong>.
+        </p>
+
+        <div class="pill">
+          <span class="dot"></span>
+          <span>Jurisdicción: Ecuador</span>
+        </div>
+
+        <form id="analisis-form">
+          <div class="row" style="margin-top:10px;">
+            <div class="col-2">
+              <label for="hechos">Hechos (cronología breve)</label>
+              <textarea id="hechos" name="hechos" placeholder="Ejemplo: Un adolescente de 16 años refiere presunto abuso sexual por parte de su tío hace dos semanas..."></textarea>
+            </div>
+            <div class="col-2">
+              <label for="consulta">Consulta concreta (¿qué necesitas saber?)</label>
+              <textarea id="consulta" name="consulta" placeholder="Ejemplo: ¿Estoy obligado a denunciar? ¿A quién y en qué plazo? ¿Cómo manejo la confidencialidad?"></textarea>
+            </div>
+          </div>
+
+          <div style="margin-top:10px;">
+            <label>Contexto (puede elegir más de una opción)</label>
+            <div class="chips-group">
+              <label class="chip">
+                <input type="checkbox" name="contexto" value="psicología clínica" checked />
+                <span>Psicología clínica</span>
+              </label>
+              <label class="chip">
+                <input type="checkbox" name="contexto" value="psiquiatría" />
+                <span>Psiquiatría</span>
+              </label>
+              <label class="chip">
+                <input type="checkbox" name="contexto" value="salud pública" />
+                <span>Salud pública</span>
+              </label>
+              <label class="chip">
+                <input type="checkbox" name="contexto" value="ámbito educativo" />
+                <span>Ámbito educativo</span>
+              </label>
+              <label class="chip">
+                <input type="checkbox" name="contexto" value="ámbito laboral" />
+                <span>Ámbito laboral</span>
+              </label>
+              <label class="chip">
+                <input type="checkbox" name="contexto" value="otro contexto" />
+                <span>Otro</span>
+              </label>
+            </div>
+          </div>
+
+          <p class="muted" style="margin-top:6px;">
+            La lógica de búsqueda prioriza: jerarquía normativa (CRE &gt; códigos &gt; leyes &gt; lineamientos),
+            tipo de caso (NNA, violencia sexual, suicidio, adicciones, administrativo, etc.) y coincidencias
+            de palabras clave.
+          </p>
+
+          <div class="actions-row">
+            <button type="submit" class="btn btn-primary">
+              Analizar caso
+            </button>
+          </div>
+        </form>
+
+        <hr style="margin:16px 0 10px 0;border:none;border-top:1px solid #e5e7eb;" />
+
+        <div>
+          <h3 style="font-size:0.96rem;margin:0 0 4px 0;">Informe (texto plano)</h3>
+          <p class="muted" style="margin:0 0 8px 0;">
+            El informe se genera a partir del formato solicitado (sin inventar artículos). Útil para copiar en un correo,
+            minuta o informe jurídico-clínico.
+          </p>
+          <pre id="informe-texto" class="output">(Esperando descripción del caso...)</pre>
+
+          <!-- NUEVO LAYOUT: pregunta + botones al mismo nivel -->
+          <div class="informe-footer">
+            <!-- Izquierda: ¿Su consulta fue resuelta? -->
+            <div class="informe-feedback">
+              <h3 style="font-size:0.9rem;margin:0 0 6px 0;">¿Su consulta fue resuelta?</h3>
+              <p class="muted" style="margin:0 0 6px 0;">
+                Gracias por utilizar esta aplicación. Tu respuesta ayuda a mejorar el agente de IA y la calidad de las orientaciones.
+              </p>
+              <div class="chips-group">
+                <label class="chip">
+                  <input type="radio" name="resuelta" value="si" />
+                  <span>Sí</span>
+                </label>
+                <label class="chip">
+                  <input type="radio" name="resuelta" value="no" />
+                  <span>No</span>
+                </label>
+              </div>
+              <div id="feedback-error" class="error-note hidden">
+                Por favor, indica si tu consulta fue resuelta antes de iniciar un nuevo análisis jurídico.
+              </div>
+              <div id="feedback-toast" class="toast hidden">
+                Gracias por tu respuesta. Tu percepción ha quedado registrada.
+              </div>
+            </div>
+
+            <!-- Derecha: botones + toast de copiado -->
+            <div class="informe-actions">
+              <span id="toast-copiado" class="toast hidden">
+                ✓ Informe copiado al portapapeles.
+              </span>
+              <div class="actions-row" style="margin-top:4px;">
+                <button id="btn-nuevo" type="button" class="btn btn-ghost btn-sm">
+                  Nuevo análisis jurídico
+                </button>
+                <button id="btn-copiar" type="button" class="btn btn-ghost btn-sm">
+                  Copiar informe
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- JSON debug (oculto para el usuario final) -->
+        <div id="debug-json-wrapper">
+          <details id="debug-json">
+            <summary>Ver JSON (debug)</summary>
+            <pre id="debug-json-pre"></pre>
+          </details>
+        </div>
+      </section>
+
+      <footer>
+        <hr />
+        <div>
+          Copyright © 2026 Danny Sebastian Ordoñez Alberca y Jose Luis Vilchez Tornero.
+          No part of this repository may be copied, modified, distributed, or used for commercial,
+          academic, or clinical purposes without explicit written permission from the author.
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    "use strict";
+
+    // Apps Script endpoint (fijo en HTML)
+    const DEFAULT_ENDPOINT = "https://script.google.com/macros/s/AKfycbyLoHxF1anuLWhRRAJke7CBItCrt8NxzuTDK5X8wQPH2-lJ6AbMc7I90-hEpiDznQJU/exec";
+
+    // ======================================================
+    // Biblioteca normativa local
+    // ======================================================
+
+    const NORMAS = [
+      {
+        id: "CRE-44",
+        norma: "Constitución de la República del Ecuador (CRE)",
+        jerarquia: 10,
+        articulo: "44",
+        etiqueta: "Interés superior de niñas, niños y adolescentes",
+        resumen:
+          "Reconoce a niñas, niños y adolescentes como grupo de atención prioritaria y ordena que su interés superior prevalezca en todas las decisiones que les afecten.",
+        tags: ["constitucion", "NNA", "proteccion"],
+        keywords: ["niño", "niña", "adolescente", "nna", "menor", "interés superior", "grupo de atención prioritaria"]
+      },
+      {
+        id: "CRE-66",
+        norma: "Constitución de la República del Ecuador (CRE)",
+        jerarquia: 10,
+        articulo: "66, núm. 3 y 4",
+        etiqueta: "Derecho a la integridad personal y a una vida libre de violencia",
+        resumen:
+          "Reconoce el derecho a la integridad física, psíquica y moral, y a una vida libre de violencia, incluidas violencias de carácter sexual.",
+        tags: ["constitucion", "integridad", "violencia"],
+        keywords: ["integridad", "vida libre de violencia", "violencia", "maltrato", "lesión"]
+      },
+      {
+        id: "CRE-78",
+        norma: "Constitución de la República del Ecuador (CRE)",
+        jerarquia: 10,
+        articulo: "78",
+        etiqueta: "Derechos de las víctimas",
+        resumen:
+          "Reconoce a las víctimas de infracciones penales el derecho a protección, reparación integral y a ser informadas sobre el proceso penal.",
+        tags: ["constitucion", "victimas"],
+        keywords: ["víctima", "víctimas", "reparación", "protección", "derechos de las víctimas"]
+      },
+      {
+        id: "CNA-11",
+        norma: "Código de la Niñez y Adolescencia (CNA)",
+        jerarquia: 9,
+        articulo: "11",
+        etiqueta: "Principio de interés superior del niño, niña y adolescente",
+        resumen:
+          "Establece que el interés superior de niños, niñas y adolescentes debe guiar toda decisión, priorizando su protección integral frente a cualquier riesgo.",
+        tags: ["NNA", "proteccion"],
+        keywords: ["niño", "niña", "adolescente", "nna", "interés superior", "protección integral"]
+      },
+      {
+        id: "CNA-52",
+        norma: "Código de la Niñez y Adolescencia (CNA)",
+        jerarquia: 9,
+        articulo: "52",
+        etiqueta: "Protección frente a abusos y maltratos",
+        resumen:
+          "Dispone protección frente a toda forma de violencia, incluido abuso sexual, y obliga a las autoridades a actuar de oficio cuando conozcan estos hechos.",
+        tags: ["NNA", "violencia", "sexual"],
+        keywords: ["abuso sexual", "violencia sexual", "maltrato", "agresión", "delito sexual"]
+      },
+      {
+        id: "LOIPEVM-3",
+        norma:
+          "Ley Orgánica Integral para Prevenir y Erradicar la Violencia contra las Mujeres (LOIPEVM)",
+        jerarquia: 8,
+        articulo: "3",
+        etiqueta: "Ámbito y definición de violencia contra las mujeres",
+        resumen:
+          "Define la violencia contra las mujeres, incluidas niñas y adolescentes, como violación de derechos humanos que exige prevención, atención y sanción.",
+        tags: ["violencia_genero", "NNA"],
+        keywords: ["violencia de género", "mujer", "adolescente", "violencia sexual", "maltrato"]
+      },
+      {
+        id: "LOIPEVM-7",
+        norma:
+          "Ley Orgánica Integral para Prevenir y Erradicar la Violencia contra las Mujeres (LOIPEVM)",
+        jerarquia: 8,
+        articulo: "7",
+        etiqueta: "Obligación de denunciar y coordinar protección",
+        resumen:
+          "Establece el deber de las instituciones y profesionales de activar rutas de protección y denunciar hechos de violencia contra mujeres, niñas y adolescentes.",
+        tags: ["violencia_genero", "denuncia", "NNA"],
+        keywords: ["denunciar", "ruta de actuación", "violencia contra la mujer", "mujer", "niña", "adolescente"]
+      },
+      {
+        id: "COIP-170",
+        norma: "Código Orgánico Integral Penal (COIP)",
+        jerarquia: 8,
+        articulo: "170",
+        etiqueta: "Abuso sexual",
+        resumen:
+          "Tipifica el abuso sexual como acto de naturaleza sexual sin consentimiento o con víctimas especialmente vulnerables, incluida la adolescencia.",
+        tags: ["penal", "sexual", "NNA", "delito"],
+        keywords: ["abuso sexual", "tocamientos", "acto sexual", "delito sexual", "presunto abuso", "manoseo"]
+      },
+      {
+        id: "COIP-171",
+        norma: "Código Orgánico Integral Penal (COIP)",
+        jerarquia: 8,
+        articulo: "171 y concordantes",
+        etiqueta: "Delitos contra la integridad sexual",
+        resumen:
+          "Regula delitos de violación y otras formas graves de agresión sexual, con agravantes cuando la víctima es adolescente.",
+        tags: ["penal", "sexual", "NNA", "delito"],
+        keywords: ["violación", "delito sexual", "acceso carnal", "coito", "integridad sexual"]
+      },
+      {
+        id: "COIP-421",
+        norma: "Código Orgánico Integral Penal (COIP)",
+        jerarquia: 8,
+        articulo: "421",
+        etiqueta: "Titularidad de la acción penal",
+        resumen:
+          "Establece que ciertos delitos, como los sexuales contra NNA, son de ejercicio público y pueden ser perseguidos de oficio por la Fiscalía.",
+        tags: ["penal", "denuncia"],
+        keywords: ["acción pública", "delito de ejercicio público", "fiscalía", "denuncia"]
+      },
+      {
+        id: "COIP-422",
+        norma: "Código Orgánico Integral Penal (COIP)",
+        jerarquia: 8,
+        articulo: "422",
+        etiqueta: "Deber de denunciar",
+        resumen:
+          "Impone a funcionarios y profesionales de la salud que conozcan un presunto delito el deber de denunciarlo ante la autoridad competente.",
+        tags: ["penal", "denuncia", "profesionales_salud"],
+        keywords: ["deber de denunciar", "obligación de denunciar", "profesional de la salud", "psicólogo", "médico"]
+      },
+      {
+        id: "COIP-423",
+        norma: "Código Orgánico Integral Penal (COIP)",
+        jerarquia: 8,
+        articulo: "423",
+        etiqueta: "Remisión a Fiscalía y plazos",
+        resumen:
+          "Dispone que denuncias presentadas ante Policía o personal especializado se remitan a Fiscalía en un plazo máximo, usualmente referido a veinticuatro horas.",
+        tags: ["penal", "denuncia", "plazos"],
+        keywords: ["24 horas", "veinticuatro horas", "remitir a fiscalía", "plazo", "denuncia"]
+      },
+      {
+        id: "COIP-424",
+        norma: "Código Orgánico Integral Penal (COIP)",
+        jerarquia: 8,
+        articulo: "424",
+        etiqueta: "Excepciones al deber de denunciar y secreto profesional",
+        resumen:
+          "Regula supuestos en los que quien conoce el hecho en el marco del secreto profesional puede quedar exento de denunciar, sin eliminar deberes de protección.",
+        tags: ["penal", "secreto_profesional", "confidencialidad"],
+        keywords: ["secreto profesional", "confesión", "exento de denunciar", "confidencial"]
+      },
+      {
+        id: "LOS-Calidad",
+        norma: "Ley Orgánica de Salud (LOS)",
+        jerarquia: 8,
+        articulo: "Artículos sobre calidad y responsabilidad (referencial)",
+        etiqueta: "Calidad de la atención y responsabilidad profesional",
+        resumen:
+          "Establece obligaciones de los prestadores de servicios de salud en cuanto a calidad de la atención, seguridad del paciente y responsabilidad profesional.",
+        tags: ["salud", "calidad_atencion"],
+        keywords: ["prestadores de salud", "calidad de atención", "responsabilidad profesional", "seguridad del paciente"]
+      },
+      {
+        id: "LOS-Historia",
+        norma: "Ley Orgánica de Salud (LOS)",
+        jerarquia: 8,
+        articulo: "Artículos sobre historia clínica (referencial)",
+        etiqueta: "Historia clínica y confidencialidad",
+        resumen:
+          "Regula la elaboración, custodia y confidencialidad de la historia clínica como documento obligatorio en la prestación de servicios de salud.",
+        tags: ["salud", "historia_clinica", "confidencialidad"],
+        keywords: ["historia clínica", "registro clínico", "confidencialidad", "archivo clínico"]
+      },
+      {
+        id: "LOSM-50",
+        norma: "Ley Orgánica de Salud Mental (LOSM)",
+        jerarquia: 7,
+        articulo: "50 (según versiones comentadas, referencial)",
+        etiqueta: "Secreto profesional y confidencialidad en salud mental",
+        resumen:
+          "Reconoce el deber de secreto profesional y confidencialidad, pero exige actuar conforme a la ley cuando exista riesgo grave o delito.",
+        tags: ["salud_mental", "confidencialidad", "secreto_profesional"],
+        keywords: ["salud mental", "secreto profesional", "confidencialidad", "sesión", "terapia"]
+      },
+      {
+        id: "MSP-64",
+        norma:
+          "Acuerdo Ministerial 64 (MSP) – Directrices para el ejercicio de las profesiones de la salud",
+        jerarquia: 7,
+        articulo: "Cláusulas sobre alcance del ejercicio profesional (referencial)",
+        etiqueta: "Alcance y límites del ejercicio profesional",
+        resumen:
+          "Define el alcance, responsabilidades y limitaciones del ejercicio de las profesiones de la salud, incluyendo la obligación de actuar dentro del ámbito de competencia.",
+        tags: ["ejercicio_profesional", "profesionales_salud"],
+        keywords: ["alcance del ejercicio profesional", "competencia profesional", "responsabilidad", "psicólogo", "psiquiatra"]
+      },
+      {
+        id: "MSP-Lineamientos-Psico",
+        norma:
+          "Lineamientos Operativos para Psicólogos y Psiquiatras en los Tres Niveles de Atención (MSP)",
+        jerarquia: 6,
+        articulo: "Lineamientos generales (referencial)",
+        etiqueta: "Funciones de psicólogos y psiquiatras por nivel de atención",
+        resumen:
+          "Describe funciones específicas de psicólogos y psiquiatras, incluyendo evaluación de riesgo, intervención en crisis y derivación.",
+        tags: ["salud_mental", "psicologia", "psiquiatria"],
+        keywords: ["psicólogo", "psiquiatra", "riesgo", "intervención en crisis", "derivación"]
+      },
+      {
+        id: "MSP-Lineamientos-Responsables",
+        norma:
+          "Lineamientos y Directrices para responsables de salud mental y promoción de la salud (MSP)",
+        jerarquia: 6,
+        articulo: "Lineamientos para responsables (referencial)",
+        etiqueta: "Responsabilidades de coordinación en salud mental",
+        resumen:
+          "Establece responsabilidades de coordinación, registro y reporte de casos de salud mental en los distintos niveles de gestión.",
+        tags: ["salud_mental", "gestion"],
+        keywords: ["responsable de salud mental", "coordinación", "registro", "reporte de caso"]
+      },
+      {
+        id: "LDP-4",
+        norma: "Ley de Derechos y Amparo del Paciente",
+        jerarquia: 7,
+        articulo: "4 y concordantes",
+        etiqueta: "Derecho a la confidencialidad de la información clínica",
+        resumen:
+          "Reconoce el derecho del paciente a la confidencialidad de su información clínica, con excepciones cuando la ley autoriza o exige la revelación.",
+        tags: ["paciente", "confidencialidad", "secreto_profesional"],
+        keywords: ["derechos del paciente", "confidencialidad", "historia clínica", "información clínica"]
+      },
+      {
+        id: "MSP-5216A",
+        norma:
+          "Acuerdo Ministerial 5216-A (MSP) – Confidencialidad / reserva de la información en salud",
+        jerarquia: 6,
+        articulo: "Disposiciones sobre reserva de la información (referencial)",
+        etiqueta: "Reserva y acceso a la información en salud",
+        resumen:
+          "Detalla obligaciones de confidencialidad, condiciones de acceso a la información y excepciones permitidas por la normativa sanitaria.",
+        tags: ["confidencialidad", "informacion_salud"],
+        keywords: ["reserva de información", "confidencialidad", "acceso a la historia clínica", "secreto"]
+      },
+      {
+        id: "MSP-00115-2021",
+        norma:
+          "Acuerdo Ministerial 00115-2021 (MSP) – Reglamento e instructivo de manejo de la Historia Clínica Única",
+        jerarquia: 6,
+        articulo: "Disposiciones sobre historia clínica única (referencial)",
+        etiqueta: "Reglamento de historia clínica única",
+        resumen:
+          "Reglamenta el manejo de la historia clínica única, su estructura, registro, acceso y custodia.",
+        tags: ["historia_clinica", "gestion_informacion"],
+        keywords: ["historia clínica única", "registro clínico", "custodia", "acceso autorizado"]
+      },
+      {
+        id: "MSP-Manual-Seguridad",
+        norma: "Manual de Seguridad del Paciente (MSP/ACESS)",
+        jerarquia: 5,
+        articulo: "Capítulos sobre identificación y gestión de riesgos (referencial)",
+        etiqueta: "Gestión de riesgos y eventos adversos",
+        resumen:
+          "Orienta la identificación de riesgos, notificación de eventos adversos y acciones de mejora para la seguridad del paciente.",
+        tags: ["seguridad_paciente"],
+        keywords: ["seguridad del paciente", "evento adverso", "gestión de riesgos", "notificación"]
+      },
+      {
+        id: "LOPDP-5",
+        norma: "Ley Orgánica de Protección de Datos Personales (LOPDP)",
+        jerarquia: 7,
+        articulo: "5 y concordantes",
+        etiqueta: "Datos personales sensibles y tratamiento lícito",
+        resumen:
+          "Regula el tratamiento de datos personales sensibles, como información en salud, y permite su uso cuando exista obligación legal o interés vital.",
+        tags: ["datos_personales", "confidencialidad"],
+        keywords: ["datos personales", "datos sensibles", "protección de datos", "tratamiento lícito"]
+      },
+      {
+        id: "LOD-Discapacidad",
+        norma: "Ley Orgánica de Discapacidades",
+        jerarquia: 7,
+        articulo: "Artículos sobre igualdad y no discriminación (referencial)",
+        etiqueta: "Derechos y ajustes razonables para personas con discapacidad",
+        resumen:
+          "Reconoce derechos de las personas con discapacidad, prohíbe la discriminación y establece ajustes razonables en servicios de salud y educación.",
+        tags: ["discapacidad", "grupos_prioritarios"],
+        keywords: ["discapacidad", "ajustes razonables", "no discriminación", "apoyos", "rehabilitación"]
+      },
+      {
+        id: "LOPAM-AdultosMayores",
+        norma: "Ley Orgánica de las Personas Adultas Mayores",
+        jerarquia: 7,
+        articulo: "Artículos sobre protección integral (referencial)",
+        etiqueta: "Protección integral de personas adultas mayores",
+        resumen:
+          "Establece derechos y medidas de protección para las personas adultas mayores, incluyendo protección frente a maltrato, abandono y negligencia.",
+        tags: ["adulto_mayor", "grupos_prioritarios"],
+        keywords: ["persona adulta mayor", "maltrato", "abandono", "protección integral", "cuidados"]
+      },
+      {
+        id: "Reg-LOPAM",
+        norma:
+          "Reglamento General de la Ley Orgánica de las Personas Adultas Mayores",
+        jerarquia: 6,
+        articulo: "Disposiciones reglamentarias (referencial)",
+        etiqueta: "Procedimientos para protección de personas adultas mayores",
+        resumen:
+          "Desarrolla procedimientos y mecanismos institucionales para aplicar las medidas de protección a personas adultas mayores.",
+        tags: ["adulto_mayor", "reglamento"],
+        keywords: ["procedimientos de protección", "denuncia", "servicios gerontológicos"]
+      },
+      {
+        id: "COA-Actuacion",
+        norma: "Código Orgánico Administrativo (COA)",
+        jerarquia: 7,
+        articulo: "Artículos sobre actuaciones administrativas (referencial)",
+        etiqueta: "Procedimiento administrativo y recursos",
+        resumen:
+          "Regula el procedimiento administrativo, las actuaciones de las instituciones públicas y los recursos administrativos.",
+        tags: ["administrativo"],
+        keywords: [
+          "procedimiento administrativo",
+          "recurso administrativo",
+          "acto administrativo",
+          "administración pública",
+          "administracion publica"
+        ]
+      },
+      {
+        id: "COA-Plazos",
+        norma: "Código Orgánico Administrativo (COA)",
+        jerarquia: 7,
+        articulo: "Artículos sobre plazos y recursos (referencial)",
+        etiqueta: "Plazos y medios de impugnación",
+        resumen:
+          "Establece plazos para interponer recursos administrativos (reconsideración, apelación, etc.) contra actos administrativos, normalmente contados en días hábiles desde la notificación.",
+        tags: ["administrativo", "plazos"],
+        keywords: [
+          "plazo",
+          "recurso de apelación",
+          "recurso de apelacion",
+          "recurso de reconsideración",
+          "recurso de reconsideracion",
+          "impugnación",
+          "impugnacion",
+          "acto administrativo",
+          "notificación",
+          "notificacion"
+        ]
+      },
+      {
+        id: "MSP-00025-2025",
+        norma:
+          "Acuerdo Ministerial Nro. 00025-2025 (MSP) – Formulario de Evaluación Médica Ocupacional (FEMO) e instructivo",
+        jerarquia: 6,
+        articulo: "Disposiciones sobre evaluación médica ocupacional (referencial)",
+        etiqueta: "Evaluación médica ocupacional",
+        resumen:
+          "Regula el Formulario de Evaluación Médica Ocupacional y la responsabilidad de los prestadores en salud ocupacional.",
+        tags: ["salud_ocupacional"],
+        keywords: ["evaluación médica ocupacional", "FEMO", "salud ocupacional", "trabajador"]
+      },
+      {
+        id: "CodigoCivil-Resp",
+        norma: "Código Civil",
+        jerarquia: 6,
+        articulo: "Artículos sobre responsabilidad civil (referencial)",
+        etiqueta: "Responsabilidad civil por daño",
+        resumen:
+          "Contiene reglas generales sobre responsabilidad civil por daño, relevantes para posibles reclamaciones por mala praxis.",
+        tags: ["civil", "responsabilidad"],
+        keywords: ["responsabilidad civil", "daño", "indemnización", "culpa", "dolo"]
+      },
+      {
+        id: "COGEP-Medidas",
+        norma: "Código Orgánico General de Procesos (COGEP)",
+        jerarquia: 7,
+        articulo: "Artículos sobre medidas cautelares (referencial)",
+        etiqueta: "Medidas cautelares para protección inmediata",
+        resumen:
+          "Regula la adopción de medidas cautelares en procesos civiles y de familia para proteger derechos frente a riesgos inmediatos.",
+        tags: ["procesal", "medidas_cautelares", "administrativo"],
+        keywords: ["medida cautelar", "protección inmediata", "juez de familia", "proceso"]
+      },
+      {
+        id: "COFJ-Deontologia",
+        norma: "Código Orgánico de la Función Judicial (COFJ)",
+        jerarquia: 7,
+        articulo:
+          "Artículos sobre deberes de jueces y servidores judiciales (referencial)",
+        etiqueta: "Principios y deberes de la función judicial",
+        resumen:
+          "Establece principios y deberes que orientan la actuación de jueces y operadores de justicia, incluyendo trato digno y protección de grupos vulnerables.",
+        tags: ["funcion_judicial"],
+        keywords: ["juez", "función judicial", "principios", "grupos vulnerables"]
+      },
+      {
+        id: "MSP-Lineamiento-Suicidio",
+        norma: "Lineamiento de intención e intentos de suicidio (MSP)",
+        jerarquia: 6,
+        articulo: "Lineamiento clínico-operativo (referencial)",
+        etiqueta: "Evaluación y manejo del riesgo suicida",
+        resumen:
+          "Establece criterios para la evaluación del riesgo suicida, niveles de intervención y necesidad de derivar o hospitalizar según el riesgo.",
+        tags: ["salud_mental", "suicidio"],
+        keywords: ["intento de suicidio", "riesgo suicida", "autolesión", "evaluación de riesgo"]
+      },
+      {
+        id: "MSP-Lineamiento-Duelo",
+        norma: "Lineamientos operativos para el manejo del duelo (MSP)",
+        jerarquia: 5,
+        articulo: "Lineamientos sobre duelo (referencial)",
+        etiqueta: "Manejo del duelo y duelo complicado",
+        resumen:
+          "Orienta la detección de duelo complicado y las intervenciones recomendadas en los distintos niveles de atención.",
+        tags: ["salud_mental", "duelo"],
+        keywords: ["duelo", "pérdida", "fallecimiento", "acompañamiento"]
+      },
+      {
+        id: "MSP-Lineamiento-TCA",
+        norma: "Lineamientos de Anorexia y Bulimia Nerviosa (MSP)",
+        jerarquia: 5,
+        articulo:
+          "Lineamientos sobre trastornos de la conducta alimentaria (referencial)",
+        etiqueta: "Manejo de trastornos de la conducta alimentaria",
+        resumen:
+          "Define criterios de gravedad, riesgos médicos y rutas de derivación para personas con trastornos de la conducta alimentaria.",
+        tags: ["salud_mental", "TCA"],
+        keywords: ["anorexia", "bulimia", "trastorno de la conducta alimentaria", "bajo peso", "riesgo médico"]
+      },
+      {
+        id: "MSP-UIC",
+        norma: "Lineamiento de Unidades de Intervención en Crisis (MSP)",
+        jerarquia: 5,
+        articulo: "Lineamiento de unidades de intervención en crisis (referencial)",
+        etiqueta: "Organización de unidades de intervención en crisis",
+        resumen:
+          "Regula la organización y funcionamiento de unidades de intervención en crisis para cuadros agudos de salud mental.",
+        tags: ["salud_mental", "crisis"],
+        keywords: ["intervención en crisis", "episodio agudo", "contención", "derivación urgente"]
+      },
+      {
+        id: "MSP-USM-Hosp",
+        norma: "Lineamiento de Unidades de Salud Mental Hospitalaria (MSP)",
+        jerarquia: 5,
+        articulo: "Lineamiento de unidades hospitalarias (referencial)",
+        etiqueta: "Hospitalización en salud mental",
+        resumen:
+          "Describe criterios de ingreso, permanencia y alta en unidades de hospitalización en salud mental.",
+        tags: ["salud_mental", "hospitalario"],
+        keywords: ["hospitalización psiquiátrica", "unidad de salud mental", "internación"]
+      },
+      {
+        id: "MSP-AmbIntensivo",
+        norma: "Lineamientos operativos de Ambulatorio Intensivo (MSP)",
+        jerarquia: 5,
+        articulo: "Lineamiento de ambulatorio intensivo (referencial)",
+        etiqueta: "Atención ambulatoria intensiva",
+        resumen:
+          "Establece parámetros para la atención ambulatoria intensiva como alternativa a la hospitalización plena.",
+        tags: ["salud_mental", "ambulatorio_intensivo"],
+        keywords: ["ambulatorio intensivo", "programa diurno", "psicoterapia grupal", "seguimiento estrecho"]
+      },
+      {
+        id: "MSP-CETAD-Op",
+        norma: "Lineamientos Operativos CETAD (MSP)",
+        jerarquia: 5,
+        articulo: "Lineamientos operativos CETAD (referencial)",
+        etiqueta: "Centros especializados en consumo problemático de sustancias",
+        resumen:
+          "Regula el funcionamiento de los Centros Especializados en el Tratamiento a Personas con Consumo Problemático de Alcohol y otras Drogas.",
+        tags: ["adicciones", "CETAD"],
+        keywords: ["consumo problemático", "drogas", "alcohol", "centro especializado", "tratamiento residencial"]
+      },
+      {
+        id: "MSP-Manual-Emergencias",
+        norma: "Manual de Salud Mental en Emergencias y Desastres (MSP)",
+        jerarquia: 5,
+        articulo: "Manual de emergencias y desastres (referencial)",
+        etiqueta: "Atención en salud mental en emergencias y desastres",
+        resumen:
+          "Proporciona orientaciones para la atención en salud mental en contextos de emergencias y desastres.",
+        tags: ["salud_mental", "emergencias"],
+        keywords: ["emergencias", "desastres", "primeros auxilios psicológicos", "PAP"]
+      },
+      {
+        id: "MSP-Modelo-Drogas-Amb",
+        norma: "Modelo de atención integral ambulatoria para drogas (MSP)",
+        jerarquia: 5,
+        articulo:
+          "Modelo ambulatorio para consumo de sustancias (referencial)",
+        etiqueta: "Modelo ambulatorio para consumo problemático",
+        resumen:
+          "Define componentes del modelo ambulatorio para personas con consumo problemático de alcohol y otras drogas.",
+        tags: ["adicciones", "ambulatorio"],
+        keywords: ["consumo problemático", "drogas", "alcohol", "tratamiento ambulatorio"]
+      },
+      {
+        id: "MSP-Modelo-Drogas-Res-Adol",
+        norma:
+          "Modelo de atención integral residencial CETAD – Adolescentes (MSP)",
+        jerarquia: 5,
+        articulo: "Modelo residencial para adolescentes (referencial)",
+        etiqueta:
+          "Tratamiento residencial para adolescentes con consumo problemático",
+        resumen:
+          "Especifica criterios y componentes del tratamiento residencial para adolescentes con consumo problemático de sustancias.",
+        tags: ["adicciones", "CETAD", "NNA"],
+        keywords: ["adolescente", "tratamiento residencial", "consumo problemático", "drogas"]
+      },
+      {
+        id: "MSP-Modelo-Drogas-Res-Adult",
+        norma:
+          "Modelo de atención integral residencial CETAD – Adultos (MSP)",
+        jerarquia: 5,
+        articulo:
+          "Modelo residencial para personas adultas (referencial)",
+        etiqueta:
+          "Tratamiento residencial para personas adultas con consumo problemático",
+        resumen:
+          "Describe el modelo residencial para personas adultas con consumo problemático de alcohol y otras drogas.",
+        tags: ["adicciones", "CETAD"],
+        keywords: ["persona adulta", "tratamiento residencial", "consumo problemático", "drogas"]
+      },
+      {
+        id: "MSP-Plan-SaludMental",
+        norma:
+          "Acuerdo Ministerial Nro. 0004927 (MSP) – Modelo/Plan de Salud Mental 2014–2017",
+        jerarquia: 5,
+        articulo: "Plan de salud mental (referencial)",
+        etiqueta: "Lineamientos estratégicos de salud mental",
+        resumen:
+          "Establece lineamientos estratégicos para el desarrollo de la red de salud mental en el país.",
+        tags: ["salud_mental", "politica_publica"],
+        keywords: ["plan de salud mental", "política pública", "red de salud mental"]
+      }
+    ];
+
+    // ======== utilidades y estado global ========
+
+    let ultimoAnalisis = null;
+
+    function normalizarTexto(t) {
+      return (t || "").toLowerCase();
+    }
+
+    function detectarFlags(hechos, consulta, contexto) {
+      const t = normalizarTexto(hechos + " " + consulta + " " + contexto);
+      return {
+        esNNA:
+          t.includes("niño") ||
+          t.includes("niña") ||
+          t.includes("niñez") ||
+          t.includes("adolescente") ||
+          t.includes("nna") ||
+          t.includes("menor"),
+        esDelitoSexual:
+          t.includes("abuso sexual") ||
+          t.includes("violación") ||
+          t.includes("violacion") ||
+          t.includes("delito sexual") ||
+          t.includes("tocamientos") ||
+          t.includes("acoso sexual") ||
+          t.includes("presunto abuso"),
+        esSuicidio:
+          t.includes("suicidio") ||
+          t.includes("intento de suicidio") ||
+          t.includes("ideas suicidas") ||
+          t.includes("se quiere morir") ||
+          t.includes("quitarse la vida"),
+        esPsicologo:
+          t.includes("psicólogo") ||
+          t.includes("psicologa") ||
+          t.includes("psicólogo clínico") ||
+          t.includes("psicologia"),
+        esInstitucionEducativa:
+          t.includes("unidad educativa") ||
+          t.includes("colegio") ||
+          t.includes("escuela") ||
+          t.includes("instituto") ||
+          t.includes("universidad"),
+        mencionaMadrePadre:
+          t.includes("madre") ||
+          t.includes("padre") ||
+          t.includes("representante") ||
+          t.includes("tutor"),
+        esAdministrativo:
+          t.includes("acto administrativo") ||
+          t.includes("resolución administrativa") ||
+          t.includes("resolucion administrativa") ||
+          t.includes("proceso administrativo") ||
+          t.includes("sumario administrativo") ||
+          t.includes("sanción administrativa") ||
+          t.includes("sancion administrativa") ||
+          t.includes("msp") ||
+          t.includes("ministerio") ||
+          t.includes("institución pública") ||
+          t.includes("institucion publica") ||
+          t.includes("hospital público") ||
+          t.includes("hospital publico") ||
+          t.includes("coordinación zonal") ||
+          t.includes("coordinacion zonal")
+      };
+    }
+
+    function puntuarArticulo(art, flags, texto) {
+      const t = normalizarTexto(texto);
+      let score = 0;
+
+      if (flags.esNNA && art.tags.includes("NNA")) score += 6;
+      if (
+        flags.esDelitoSexual &&
+        (art.tags.includes("sexual") || art.tags.includes("violencia_genero"))
+      )
+        score += 6;
+      if (flags.esSuicidio && art.tags.includes("suicidio")) score += 6;
+      if (flags.esAdministrativo && art.tags.includes("administrativo")) score += 5;
+      if (flags.esAdministrativo && art.tags.includes("plazos")) score += 4;
+
+      if (art.tags.includes("constitucion")) score += 4;
+      if (art.tags.includes("penal") || art.tags.includes("civil") || art.tags.includes("procesal"))
+        score += 3;
+
+      if (
+        flags.esPsicologo &&
+        (art.tags.includes("psicologia") ||
+          art.tags.includes("profesionales_salud") ||
+          art.tags.includes("salud_mental"))
+      ) {
+        score += 2;
+      }
+
+      if (flags.esInstitucionEducativa && art.tags.includes("administrativo")) score += 1;
+      if (flags.mencionaMadrePadre && art.tags.includes("familia")) score += 1;
+      if (flags.esDelitoSexual && art.tags.includes("denuncia")) score += 2;
+      if (flags.esDelitoSexual && art.tags.includes("victimas")) score += 1;
+
+      for (const kw of art.keywords) {
+        if (kw && t.includes(kw.toLowerCase())) {
+          score += 1;
+        }
+      }
+
+      score += art.jerarquia * 0.1;
+      return score;
+    }
+
+    function seleccionarNormativaRelevante(hechos, consulta, contexto) {
+      const flags = detectarFlags(hechos, consulta, contexto);
+      const texto = (hechos || "") + " " + (consulta || "");
+      const puntuados = NORMAS.map((art) => ({
+        art,
+        score: puntuarArticulo(art, flags, texto)
+      }));
+      puntuados.sort((a, b) => b.score - a.score);
+      const seleccion = puntuados.filter((x) => x.score > 0).slice(0, 14).map((x) => x.art);
+      return { flags, seleccion };
+    }
+
+    function construirInforme(datos) {
+      const jurisdiccion = "Ecuador";
+      const ahora = new Date().toISOString();
+      const hechos = datos.hechos || "";
+      const consulta = datos.consulta || "";
+      const contexto = datos.contexto || "";
+      const { flags, seleccion } = seleccionarNormativaRelevante(hechos, consulta, contexto);
+
+      const partes = [];
+
+      partes.push("INFORME DE ACTUACIÓN (TEXTO PLANO)");
+      partes.push("Jurisdicción: " + jurisdiccion);
+      let lineaUsuario = "Usuario: ";
+      if (datos.nombre) {
+        lineaUsuario += datos.nombre;
+      } else {
+        lineaUsuario += "No especificado";
+      }
+      if (datos.profesion) {
+        lineaUsuario += " – " + datos.profesion;
+      }
+      partes.push(lineaUsuario);
+      partes.push("Fecha/hora: " + ahora);
+      partes.push("");
+
+      partes.push("NORMATIVA PERTINENTE");
+      if (seleccion.length === 0) {
+        partes.push(
+          "- (No se detectó normativa/artículos claramente vinculados con la consulta actual. Usa este informe solo como apoyo orientativo.)"
+        );
+      } else {
+        let idx = 1;
+        for (const art of seleccion) {
+          partes.push(idx + ". " + art.norma);
+          partes.push("   - Art. " + art.articulo + ": " + art.etiqueta + ".");
+          partes.push("     Contenido pertinente citado: " + art.resumen);
+          partes.push("");
+          idx++;
+        }
+      }
+
+      partes.push("HECHO ANALIZADO");
+      partes.push(
+        "- Descripción de los hechos: " +
+          (hechos.trim() ? hechos.trim() : "(sin descripción detallada ingresada).")
+      );
+      partes.push(
+        "- Pregunta o consulta jurídica: " +
+          (consulta.trim() ? consulta.trim() : "(no se especificó consulta concreta).")
+      );
+      if (contexto && contexto.trim()) {
+        partes.push("- Contexto profesional/institucional: " + contexto.trim() + ".");
+      }
+      partes.push("");
+
+      partes.push("SUGERENCIA DE ACCIÓN A TOMAR (RAZONADA)");
+      partes.push("1. Ponderación: deber de protección vs. secreto profesional");
+
+      if (flags.esNNA && flags.esDelitoSexual) {
+        partes.push(
+          "   - Desde la perspectiva constitucional y de protección de NNA (CRE, arts. 44 y 78; CNA, arts. 11 y 52), el interés superior del adolescente y el deber de protegerlo frente a violencia sexual prevalecen."
+        );
+        partes.push(
+          "   - Desde el ámbito penal (COIP, arts. 170, 171, 421, 422, 423 y 424), los hechos descritos encajan como posible delito sexual de ejercicio público que obliga a denunciar."
+        );
+        partes.push(
+          "   - Desde el ámbito clínico y de confidencialidad (LOSM; Ley de Derechos y Amparo del Paciente; LOPDP), el secreto profesional no es absoluto cuando existe riesgo grave o presunto delito contra un NNA."
+        );
+      } else if (flags.esSuicidio) {
+        partes.push(
+          "   - Desde la perspectiva de protección de la vida e integridad (CRE, art. 66; LOSM; Lineamiento de intención e intentos de suicidio del MSP), el deber principal es evaluar y reducir el riesgo vital."
+        );
+        partes.push(
+          "   - La confidencialidad puede limitarse de forma proporcional cuando la revelación de información es necesaria para proteger la vida o integridad de la persona."
+        );
+      } else if (flags.esAdministrativo) {
+        partes.push(
+          "   - Desde el punto de vista del derecho administrativo (COA), es necesario distinguir entre derechos de la persona usuaria de servicios públicos de salud/educación y las facultades de la administración pública."
+        );
+        partes.push(
+          "   - El COA regula cómo se dictan los actos administrativos, cómo se notifican y qué recursos existen para impugnarlos (reconsideración, apelación, otros), así como los plazos para ejercerlos."
+        );
+        partes.push(
+          "   - En casos donde también hay componentes penales o de protección de grupos vulnerables, el análisis administrativo se complementa con la normativa penal, civil o de protección especial (por ejemplo, CNA, LOIPEVM, COIP)."
+        );
+        partes.push(
+          "   - Contactos sugeridos (según contexto): asesoría jurídica de la institución pública implicada, defensoría del pueblo y, cuando corresponda, patrocinio particular especializado en derecho administrativo."
+        );
+      } else {
+        partes.push(
+          "   - Se deben ponderar los deberes de confidencialidad (Ley de Derechos y Amparo del Paciente, LOPDP, LOS/LOSM) con las obligaciones legales de protección, denuncia o reporte que impongan normas especiales (por ejemplo, COIP, LOIPEVM, CNA, COA)."
+        );
+      }
+      partes.push("");
+
+      partes.push("2. Ruta de actuación concreta (modelo orientativo)");
+      partes.push("2.1 Comunicación con la persona consultante");
+      partes.push(
+        "   - Explicar con lenguaje claro que existe un compromiso de confidencialidad, pero que las leyes de protección y las normas penales o administrativas pueden obligar a informar ciertos hechos para proteger derechos fundamentales."
+      );
+      if (flags.esNNA && flags.esDelitoSexual) {
+        partes.push(
+          "   - Aclarar al adolescente que el objetivo de informar no es “traicionarlo”, sino activarle protección frente al presunto abuso sexual y proteger también a otras posibles víctimas (por ejemplo, su madre u otros NNA)."
+        );
+      }
+      if (flags.esSuicidio) {
+        partes.push(
+          "   - Explicar que, ante riesgo suicida, es necesario activar apoyos y posiblemente informar a familiares o autoridades sanitarias para reducir el riesgo."
+        );
+      }
+      partes.push("");
+
+      partes.push("2.2 Comunicación con familia / representantes legales (cuando proceda)");
+      if (flags.esNNA) {
+        partes.push(
+          "   - Valorar quién ejerce la representación adecuada (progenitores, representantes legales, Junta Cantonal de Protección de Derechos), considerando si alguno de ellos podría estar vinculado a los hechos de violencia."
+        );
+      } else {
+        partes.push(
+          "   - Con personas adultas, obtener, cuando sea posible, consentimiento informado para involucrar a familiares o redes de apoyo, salvo cuando la ley exija informar incluso sin consentimiento."
+        );
+      }
+      partes.push("");
+
+      partes.push("2.3 Denuncia / reporte a autoridades competentes");
+      if (flags.esNNA && flags.esDelitoSexual) {
+        partes.push(
+          "   - Poner en conocimiento de Fiscalía un presunto delito sexual contra adolescente (COIP, arts. 170, 171 y concordantes; 421, 422 y 423)."
+        );
+        partes.push(
+          "   - Coordinar con la Junta Cantonal de Protección de Derechos de tu cantón para activar medidas de protección inmediatas al adolescente y, de ser necesario, a su madre u otros familiares (CNA; LOIPEVM)."
+        );
+        partes.push(
+          "   - Si el caso se vincula con un centro educativo, informar a las autoridades institucionales siguiendo los protocolos internos y la normativa administrativa aplicable."
+        );
+        partes.push(
+          "   - Contactos sugeridos (a ajustar según cantón/provincia): Fiscalía y Junta Cantonal de Protección de Derechos; utilizar los teléfonos y correos oficiales publicados por estas instituciones."
+        );
+      } else if (flags.esSuicidio) {
+        partes.push(
+          "   - Activar inmediatamente los canales de emergencia en salud (servicio de emergencias / 911 según disponibilidad local) y derivar a un servicio de segundo o tercer nivel, conforme a los lineamientos del MSP sobre riesgo suicida."
+        );
+        partes.push(
+          "   - Documentar en la historia clínica la evaluación de riesgo, el plan de seguridad y las referencias realizadas."
+        );
+      } else if (!flags.esAdministrativo) {
+        partes.push(
+          "   - Identificar si la normativa aplicable impone deber de denuncia (por ejemplo, COIP art. 422 para profesionales de la salud, LOIPEVM, CNA) o solo faculta a denunciar."
+        );
+        partes.push(
+          "   - En caso de deber de denunciar, presentar la denuncia por escrito o verbalmente ante Fiscalía o Policía, dejando constancia en la historia clínica y, cuando corresponda, informando a la institución donde trabajas."
+        );
+      }
+      partes.push("");
+
+      partes.push("2.4 Registro en historia clínica y resguardo de datos");
+      partes.push(
+        "   - Registrar de forma objetiva los hechos relatados, la evaluación profesional y las decisiones tomadas, evitando juicios de valor o conjeturas."
+      );
+      partes.push(
+        "   - Proteger la historia clínica y los datos personales conforme a LOS, LOSM, Ley de Derechos y Amparo del Paciente y LOPDP, aplicando el principio de mínima divulgación (solo lo necesario y ante la autoridad competente)."
+      );
+      partes.push("");
+
+      partes.push("3. Consideraciones finales");
+      partes.push(
+        "   - Este informe es un apoyo técnico-jurídico orientativo. No sustituye asesoría legal personalizada ni las obligaciones específicas que pueda fijar tu institución o la autoridad competente."
+      );
+      partes.push(
+        "   - Siempre que sea posible, contrasta el contenido de los artículos citados directamente en las fuentes oficiales (Registro Oficial, portales del MSP, Corte Constitucional, etc.)."
+      );
+      partes.push("");
+
+      partes.push("4. Explicación didáctica para estudiantes de derecho / salud");
+      partes.push(
+        "   - Paso 1: identificar el área principal del caso (penal, administrativo, civil, protección especial de NNA, salud mental, etc.) a partir de los hechos y de la pregunta que formula la persona consultante."
+      );
+      partes.push(
+        "   - Paso 2: localizar primero la norma de mayor jerarquía aplicable (Constitución), luego los códigos (COIP, COGEP, COA, COFJ, CNA) y finalmente leyes orgánicas especiales y lineamientos técnicos (MSP)."
+      );
+      partes.push(
+        "   - Paso 3: vincular frases concretas de los hechos (por ejemplo, “adolescente de 16 años”, “presunto abuso sexual”, “acto administrativo de sanción”) con términos jurídicos (NNA, delito de ejercicio público, acto administrativo impugnable) y revisar qué artículos describen esa situación."
+      );
+      partes.push(
+        "   - Paso 4: traducir el lenguaje técnico al lenguaje clínico y cotidiano, explicando al paciente/usuario qué implica cada obligación (denunciar, derivar, interponer recurso, pedir medidas de protección) y en qué plazos debe actuar."
+      );
+      partes.push("");
+
+      const debugPre = document.getElementById("debug-json-pre");
+      if (debugPre) {
+        const debugObj = { flags, articulos: seleccion.map((a) => a.id) };
+        debugPre.textContent = JSON.stringify(debugObj, null, 2);
+      }
+
+      const informeTexto = partes.join("\n");
+
+      // Guardamos todo el contexto del análisis para enviarlo a Sheets.
+      ultimoAnalisis = {
+        timestamp: ahora,
+        jurisdiccion,
+        input: {
+          nombre: datos.nombre || "",
+          profesion: datos.profesion || "",
+          hechos,
+          consulta,
+          contexto
+        },
+        flags,
+        articulos: seleccion,
+        informeTexto
+      };
+
+      return informeTexto;
+    }
+
+    // ======= envío a Google Sheets vía Apps Script =======
+
+    function enviarAnalisisASheets(datosUsuario) {
+      if (!DEFAULT_ENDPOINT || !ultimoAnalisis) {
+        return;
+      }
+
+      const payload = {
+        timestamp: ultimoAnalisis.timestamp,
+        jurisdiccion: ultimoAnalisis.jurisdiccion,
+        nombre: ultimoAnalisis.input.nombre,
+        cedula: datosUsuario.cedula || "",
+        profesion: ultimoAnalisis.input.profesion,
+        hechos: ultimoAnalisis.input.hechos,
+        consulta: ultimoAnalisis.input.consulta,
+        contexto: ultimoAnalisis.input.contexto,
+        flags: ultimoAnalisis.flags,
+        normativa: ultimoAnalisis.articulos.map(function (a) {
+          return {
+            id: a.id,
+            norma: a.norma,
+            articulo: a.articulo,
+            etiqueta: a.etiqueta
+          };
+        }),
+        informe: ultimoAnalisis.informeTexto
+      };
+
+      fetch(DEFAULT_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(function (r) {
+          return r.json().catch(function () {
+            return null;
+          });
+        })
+        .then(function (res) {
+          console.log("Sheets OK:", res);
+        })
+        .catch(function (err) {
+          console.error("Error enviando a Sheets:", err);
+        });
+    }
+
+    // ======== estado usuario + self-test ========
+
+    let datosUsuario = {
+      nombre: "",
+      cedula: "",
+      profesion: ""
+    };
+
+    function selfTest() {
+      try {
+        const ejemploHechos =
+          "Un adolescente de 16 años refiere presunto abuso sexual por parte de su tío hace dos semanas.";
+        const ejemploConsulta =
+          "¿Estoy obligado a denunciar? ¿Dónde y en qué plazo? ¿Qué hago con el secreto profesional?";
+        const ejemploContexto = "psicólogo clínico, ámbito educativo";
+        const informeTest = construirInforme({
+          nombre: "Test Interno",
+          profesion: "Psicólogo clínico",
+          hechos: ejemploHechos,
+          consulta: ejemploConsulta,
+          contexto: ejemploContexto
+        });
+        console.log(
+          "[Self-test] Informe generado (primeras líneas):",
+          informeTest.split("\n").slice(0, 10).join(" ")
+        );
+      } catch (e) {
+        console.error("[Self-test] Error al generar informe:", e);
+      }
+    }
+
+    // ======== wiring de la UI ========
+
+    document.addEventListener("DOMContentLoaded", function () {
+      const registroSection = document.getElementById("registro-section");
+      const appSection = document.getElementById("app-section");
+      const registroForm = document.getElementById("registro-form");
+      const analisisForm = document.getElementById("analisis-form");
+      const informePre = document.getElementById("informe-texto");
+      const btnCopiar = document.getElementById("btn-copiar");
+      const btnNuevo = document.getElementById("btn-nuevo");
+      const toastCopiado = document.getElementById("toast-copiado");
+      const feedbackToast = document.getElementById("feedback-toast");
+      const feedbackError = document.getElementById("feedback-error");
+      const feedbackRadios = document.querySelectorAll('input[name="resuelta"]');
+
+      selfTest();
+
+      if (registroForm) {
+        registroForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const nombre = document.getElementById("nombre").value.trim();
+          const cedula = document.getElementById("cedula").value.trim();
+          const profesion = document.getElementById("profesion").value.trim();
+
+          datosUsuario = { nombre: nombre, cedula: cedula, profesion: profesion };
+
+          registroSection.classList.add("hidden");
+          appSection.classList.remove("hidden");
+        });
+      }
+
+      if (analisisForm) {
+        analisisForm.addEventListener("submit", function (e) {
+          e.preventDefault();
+          const hechos = document.getElementById("hechos").value;
+          const consulta = document.getElementById("consulta").value;
+
+          const contextoChecks = Array.prototype.slice
+            .call(document.querySelectorAll('input[name="contexto"]:checked'))
+            .map(function (el) {
+              return el.value;
+            });
+          const contexto = contextoChecks.join(", ");
+
+          const informe = construirInforme({
+            nombre: datosUsuario.nombre,
+            profesion: datosUsuario.profesion,
+            hechos: hechos,
+            consulta: consulta,
+            contexto: contexto
+          });
+
+          informePre.textContent = informe;
+          toastCopiado.classList.add("hidden");
+          if (feedbackToast) feedbackToast.classList.add("hidden");
+          if (feedbackError) feedbackError.classList.add("hidden");
+          feedbackRadios.forEach(function (r) {
+            r.checked = false;
+          });
+
+          // Envío a Google Sheets
+          enviarAnalisisASheets(datosUsuario);
+        });
+      }
+
+      if (btnNuevo) {
+        btnNuevo.addEventListener("click", function () {
+          // Validar que haya respuesta en "¿Su consulta fue resuelta?"
+          const seleccion = Array.prototype.slice
+            .call(feedbackRadios)
+            .find(function (r) {
+              return r.checked;
+            });
+          if (!seleccion) {
+            if (feedbackError) {
+              feedbackError.classList.remove("hidden");
+            }
+            if (feedbackToast) {
+              feedbackToast.classList.add("hidden");
+            }
+            if (appSection) {
+              window.scrollTo({
+                top: appSection.offsetTop - 20,
+                behavior: "smooth"
+              });
+            }
+            return;
+          }
+
+          if (feedbackError) feedbackError.classList.add("hidden");
+
+          const hechosEl = document.getElementById("hechos");
+          const consultaEl = document.getElementById("consulta");
+          if (hechosEl) hechosEl.value = "";
+          if (consultaEl) consultaEl.value = "";
+
+          const contextoInputs = document.querySelectorAll('input[name="contexto"]');
+          contextoInputs.forEach(function (el, idx) {
+            el.checked = idx === 0;
+          });
+
+          informePre.textContent = "(Esperando descripción del caso...)";
+          toastCopiado.classList.add("hidden");
+
+          // Reiniciar pregunta para el siguiente caso
+          feedbackRadios.forEach(function (r) {
+            r.checked = false;
+          });
+          if (feedbackToast) feedbackToast.classList.add("hidden");
+
+          if (appSection) {
+            window.scrollTo({
+              top: appSection.offsetTop - 20,
+              behavior: "smooth"
+            });
+          }
+        });
+      }
+
+      if (btnCopiar) {
+        btnCopiar.addEventListener("click", function () {
+          const texto = informePre.textContent || "";
+          (function () {
+            try {
+              return navigator.clipboard.writeText(texto);
+            } catch (err) {
+              const ta = document.createElement("textarea");
+              ta.value = texto;
+              document.body.appendChild(ta);
+              ta.select();
+              document.execCommand("copy");
+              document.body.removeChild(ta);
+              return Promise.resolve();
+            }
+          })()
+            .then(function () {
+              toastCopiado.classList.remove("hidden");
+              setTimeout(function () {
+                toastCopiado.classList.add("hidden");
+              }, 2500);
+            })
+            .catch(function () {
+              toastCopiado.classList.remove("hidden");
+              setTimeout(function () {
+                toastCopiado.classList.add("hidden");
+              }, 2500);
+            });
+        });
+      }
+
+      feedbackRadios.forEach(function (el) {
+        el.addEventListener("change", function () {
+          if (feedbackError) {
+            feedbackError.classList.add("hidden");
+          }
+          if (feedbackToast) {
+            feedbackToast.classList.remove("hidden");
+            setTimeout(function () {
+              feedbackToast.classList.add("hidden");
+            }, 2500);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
